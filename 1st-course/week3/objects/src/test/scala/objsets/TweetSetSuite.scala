@@ -2,6 +2,7 @@ package objsets
 
 import org.junit._
 import org.junit.Assert.assertEquals
+import objsets.TweetReader
 
 class TweetSetSuite {
   trait TestSets {
@@ -60,6 +61,39 @@ class TweetSetSuite {
       assert(trends.head.user == "a" || trends.head.user == "b")
     }
 
+  def printTweet(l: List[Tweet]): List[Nothing] = l match {
+    case head::tail => { println(head.retweets); printTweet(tail) }
+    case _ => scala.Nil
+  }
 
+/*
+  @Test def `test the most tweet data from union`: Unit =
+    new TestSets {
+      val techCrunch = """[
+{ "user": "TechCrunch", "text": "Resignation Media Hires CEO John Ellis To Run Tapiture, Its Fast-Growing Pinterest For Men  http://t.co/ctn7oWJc by @anthonyha", "retweets": 18.0 },
+{ "user": "TechCrunch", "text": "FreedomPop Opens Its Freemium Internet Service To The Masses With New Public Beta http://t.co/35mA9Adp by @chrisvelazco", "retweets": 27.0 },
+{ "user": "TechCrunch", "text": "Dish And The Dream Of Internet TV http://t.co/y8KcSl8G by @ryanlawler", "retweets": 25.0 },
+{ "user": "TechCrunch", "text": "Adobe's Acrobat XI Boasts New PDF Editor And Touch-Friendly Interface ? Upgrades Start At $139 http://t.co/1YDWvlVI by @anthonyha", "retweets": 26.0 },
+{ "user": "TechCrunch", "text": "Testing Out Bodymetrics, The Startup That Wants To Be A Denim Shopper's Best Friend [TCTV] http://t.co/sPe6wA02 by @loyalelectron", "retweets": 22.0 },
+{ "user": "TechCrunch", "text": "Up Close With The Next Big Home Commodity: LED Lighting http://t.co/nGPSMnMH", "retweets": 77.0 }
+]"""
+
+      val engadget = """[
+{ "user": "engadget", "text": "Sony reveals Japan prices for Windows 8 VAIO machines -  http://t.co/FRCu2XVb", "retweets": 18.0 },
+{ "user": "engadget", "text": "FreedomPop's pay-as-you-go data service launches in beta, offering 500MB of free WiMAX per month -  http://t.co/Ny48yXUl", "retweets": 10.0 },
+{ "user": "engadget", "text": "Lenovo intros ThinkCentre M78 with AMD A-Series APU and a starting price of $449 -  http://t.co/OEDe1EwW", "retweets": 22.0 },
+{ "user": "engadget", "text": "HP announces the ElitePad 900, a business-friendly Windows 8 tablet arriving in January -  http://t.co/RjSj2cms", "retweets": 133.0 }
+]"""
+      val techChurchTweetList = TweetReader.ParseTweets.getTweetData("TechCrunch", techCrunch)
+      //printTweet(techChurchTweetList)
+      val techChurchTweetSet = TweetReader.toTweetSet(techChurchTweetList)
+
+      val engadgetTweetList = TweetReader.ParseTweets.getTweetData("engadget", engadget)
+      val engadgetTweetSet = TweetReader.toTweetSet(engadgetTweetList)
+
+      val unioned = techChurchTweetSet union engadgetTweetSet
+      assert(unioned.mostRetweeted.retweets == 133.0)
+    }
+*/
   @Rule def individualTestTimeout = new org.junit.rules.Timeout(10 * 1000)
 }

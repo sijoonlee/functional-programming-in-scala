@@ -33,6 +33,16 @@ object TweetReader {
     l.foldLeft(new Empty: TweetSet)(_.incl(_))
   }
 
+//  def toTweetSet(l: List[Tweet]): TweetSet = {
+//    def loop(l: List[Tweet], acc: TweetSet):TweetSet = l match {
+//      case head::tail => {
+//        loop(tail, acc.incl(head))
+//      }
+//      case _ => acc
+//    }
+//    loop(l, new Empty)
+//  }
+
   def unparseToData(tws: List[Tweet]): String = {
     val buf = new StringBuffer
     for (tw <- tws) {
