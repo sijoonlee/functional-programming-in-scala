@@ -42,6 +42,19 @@ class HuffmanSuite {
       assertEquals("ab".toList, decode(t1, encode(t1)("ab".toList)))
     }
 
+//  @Test def `personal test`: Unit =
+//    new TestTrees {
+//      var myString:String = "SijoonLeee"
+//      var charList = string2Chars(myString)
+//      var tree = createCodeTree(charList)
+//      println(tree)
+//      var encoded = encode(tree)(charList)
+//      println(encoded)
+//      var decoded= decode(tree, encoded)
+//      println(decoded)
+//
+//      println(decodedSecret)
+//    }
 
   @Rule def individualTestTimeout = new org.junit.rules.Timeout(10 * 1000)
 }
