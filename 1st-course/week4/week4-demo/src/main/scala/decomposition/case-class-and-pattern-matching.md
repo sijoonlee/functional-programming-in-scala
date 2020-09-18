@@ -22,6 +22,9 @@ case class BinOp(operator: String, left: Expr, right: Expr) extends Expr
 ## Pattern matching
 
 - Constructor patterns
+    - A constructor pattern matches all the values of type C
+    - with the same parameters
+    
 UnOp("-", UnOp("-", e)) => e // double negation ex) --a
 BinOp("+", e , Number(0)) => e // Adding zero ex) +0
 
