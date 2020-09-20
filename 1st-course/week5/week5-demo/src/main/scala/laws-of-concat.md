@@ -40,3 +40,28 @@ To prove a property P(xs) for all lists xs,
 - Show that P(Nil) holds base case
 - Show the induction step for a list xs and some element x
     if P(xs) holds, then P(x::xs) also holds
+    
+- Example
+```
+(xs ++ ys) ++ zs = xs ++ (ys ++ zs)
+
+concatenation of xs and ys
+if xs is Nil ==> ys
+if x::xs1 ==> x :: concat(xs1, ys)
+
+1st Clause: Nil++ys = ys
+2nd Clause: (x::xs1)++ys = x::(xs1++ys)
+
+Base case: Nil
+Left Side - (Nil ++ ys) ++ zs = ys ++ zs  (by 1st Clause)
+Right Side - Nill ++ (ys ++ zs) = ys ++ zs (by 1st Clause)
+
+Induction step: x :: xs
+Left Side - ((x::xs) ++ ys) ++ zs
+            = (x::(xs++ys)) ++ zs (by 2nd Clause)
+            = x::((xs++ys)++zs) (by 2nd Clause)
+Right Side - (x::xs) ++ (ys++zs)
+            = x::(xs++(ys++zs)) (by 2nd Clause)
+            = x::((xs++ys)++zs) (by induction hypothesis)
+
+```
