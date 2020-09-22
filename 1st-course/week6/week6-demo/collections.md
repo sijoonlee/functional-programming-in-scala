@@ -1,10 +1,11 @@
 
 ## Iterable
-Iterable -- Seq --- List / Vector
+Iterable -- Seq --- List / Vector / Range
             Set
             Map
 ## From Java 
-From Java - Arrays, Strings
+Arrays, Strings
+- most of all methods in Iterable can be used
 
 ## Range
 - represented as single object with three fields
