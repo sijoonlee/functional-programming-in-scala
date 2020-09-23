@@ -113,7 +113,7 @@ class Empty extends TweetSet {
 
   def union(that: TweetSet): TweetSet = that
 
-  def mostRetweeted: Tweet = new Tweet(null, null, 0)
+  def mostRetweeted: Tweet = new Tweet("", "", 0)
 
   def descendingByRetweet: TweetList = Nil
 
@@ -139,7 +139,12 @@ class NonEmpty(elem: Tweet, left: TweetSet, right: TweetSet) extends TweetSet {
   }
 
   def union(that: TweetSet): TweetSet = {
-    ((left union right) union that ) incl elem
+    // https://www.coursera.org/learn/progfun1/programming/Ogg05/object-oriented-sets/discussions/threads/K3WvcbHpEembCxKg8Amuug
+    // **IMPORTANT**
+    //    left union right union that incl elem     // 64ms O(n^1.3)
+    //    left union right union (that incl elem)   // 11000ms O(e^{0.3n})
+    //    left union (right union (that incl elem)) // 9ms O(n^0.9) b<<a
+    left union ( right union (that incl elem))
   }
 
   def mostRetweeted: Tweet = {
@@ -209,14 +214,14 @@ object GoogleVsApple {
   val google = List("android", "Android", "galaxy", "Galaxy", "nexus", "Nexus")
   val apple = List("ios", "iOS", "iphone", "iPhone", "ipad", "iPad")
 
-  lazy val googleTweets: TweetSet = ???
-  lazy val appleTweets: TweetSet = ???
+  lazy val googleTweets: TweetSet = TweetReader.allTweets.filter(t => google.exists(w => t.text.contains(w)))
+  lazy val appleTweets: TweetSet = TweetReader.allTweets.filter(t => apple.exists(w => t.text.contains(w)))
 
   /**
    * A list of all tweets mentioning a keyword from either apple or google,
    * sorted by the number of retweets.
    */
-  lazy val trending: TweetList = ???
+  lazy val trending: TweetList =  (googleTweets union appleTweets).descendingByRetweet
 }
 
 object Main extends App {
