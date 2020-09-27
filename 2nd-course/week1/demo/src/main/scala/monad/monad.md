@@ -68,6 +68,61 @@ whereas unit is in Scala is different for each method*
 - Right unit  
     m flatMap unit == m
 
+### Checking the Left Unit Law
+- Some(x) flatMap f == f(x)
+```
+Some(x) flatMap f
+== Some(x) match {
+    case Some(x) => f(x)
+    case None => None
+}
+== f(x)
+```
+* cf) case Some(x) => Some(f(x)) if Map
 
+### Checking the Right Unit Law
+- opt flatMap Some == opt
+```
+opt flatMap Some
+== opt match {
+    case Some(x) => Some(x)
+    case None => None
+}
+= opt
+```
 
-### Resource
+### Checking the Associative Law
+- (opt flatMap f) flatMap g == opt flatMap (x => f(x) flatMap g)
+```
+opt flatMap f flatMap g
+== opt match { case Some(x) => f(x) case None => None }
+        match { case Some(y) => g(y) case None => None }
+== opt match {
+        case Some(x) => f(x) match { case Some(y) => g(y) case None => None }
+        case None(x) => None match { case Some(y) => g(y) case None => None } }
+== opt match {
+        case Some(x) => f(x) match { case Some(y) => g(y) case None => None }
+        case None(x) => None } }
+== opt match {
+        case Some(x) => f(x) flatMap g
+        case None(x) => None } }
+== opt flatMap (x => f(x) flatMap g)
+```
+
+### Significance of the Laws for For-expressions
+1. Associativity says one can 'inline' nested for expressions
+```
+for { y <- for ( x <- m; y <- f(x) ) yield y
+      z <- g(y) } yield z
+== for { x <- m
+         y <- f(x)
+         z <- g(y) } yield z
+```
+
+2. Right unit says
+```
+for ( x <- m ) yield x
+== m
+```
+
+3. Left unit does not have an analogue for for-expression 

@@ -1,5 +1,9 @@
 package randomGen
 
+import org.scalacheck._
+import Gen._
+import Arbitrary.arbitrary
+
 object treeGen {
 
   trait Generator[+T] {
@@ -12,7 +16,7 @@ object treeGen {
 
     }
     def flatMap[S](f: T=> Generator[S]): Generator[S] = new Generator[S] {
-      def generate = f(self.generate).generate
+      def generate: S = f(self.generate).generate
     }
   }
 
@@ -24,7 +28,7 @@ object treeGen {
   val booleans = integers.map( _ > 0)
 
   // a tree is either a leaf or an inner node
-  trait Tree
+  sealed abstract class Tree
   case class Inner(left: Tree, right: Tree) extends Tree
   case class Leaf(x: Int) extends Tree
 
@@ -42,10 +46,25 @@ object treeGen {
     tree <- if(isLeaf) leafs else inners
   } yield tree
 
+  // using scala-check
+  val genLeaf = for {
+    v <- arbitrary[Int]
+  } yield Leaf(v)
+
+  val genTree: Gen[Tree] = oneOf(lzy(genLeaf), lzy(genInner))
+
+  val genInner = for {
+    left <- genTree
+    right <- genTree
+  } yield Inner(left, right)
+
+
+
   def main(args: Array[String]): Unit = {
+
     println(trees.generate)
-    println(trees.generate)
-    println(trees.generate)
+
+    println(genTree.sample)
   }
 
 }
