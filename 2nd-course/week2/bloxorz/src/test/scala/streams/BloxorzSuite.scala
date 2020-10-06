@@ -41,6 +41,7 @@ class BloxorzSuite {
 
   @Test def `terrain function level 1 (10pts)`: Unit =
     new Level1 {
+
       assert(terrain(Pos(0,0)), "0,0")
       assert(terrain(Pos(1,1)), "1,1") // start
       assert(terrain(Pos(4,7)), "4,7") // goal
