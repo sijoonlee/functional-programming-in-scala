@@ -72,7 +72,7 @@ object Json {
 ```
 Before defining the implicit conversions, we inform the compiler of our intent by writing the import clause import scala.language.implicitConversions.
 
-Implicit conversions are implicit definitions that take exactly one (non-implicit) parameter. These conversions can be used by the compiler when the code would otherwise not type check.
+Implicit conversions are implicit definitions that take **exactly one (non-implicit) parameter**. These conversions can be used by the compiler when the code would otherwise not type check. (Note: Implicit conversions can also take **implicit parameters**)
 
 Now, all the pieces are in place to support the desired user-facing syntax:
 ```
@@ -148,5 +148,5 @@ For instance, in the second example the implicit class HasSeconds is found in th
 
 We conclude this lesson with a warning. Because implicit conversions are silently applied by the compiler and they change the type of expressions, they can confuse developers reading code. Care must be taken when using implicit conversions: reducing boilerplate is a good purpose, but this should always be balanced with the possible drawbacks of not seeing pieces of code that are yet part of the program.
 
-Summary
+### Summary
 Implicit conversions can improve the ergonomics of an API but should be used sparingly.
