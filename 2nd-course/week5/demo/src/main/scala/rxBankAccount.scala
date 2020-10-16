@@ -62,6 +62,9 @@ object rxBankAccount {
       println("obs", observers)
       println("caller", caller)
       assert(!caller.value.observers.contains(this), "cyclic signal definition")
+      // cyclic definition
+      // ex) s() = s() + 1
+      // caller.value -> it's a Signal
       myValue
     }
   }
@@ -79,6 +82,13 @@ object rxBankAccount {
 
   class Var[T](expr: => T) extends Signal[T](expr) {
     override def update(expr: => T): Unit = super.update(expr)
+    /* if this override method is deleted
+    Error:(99, 9) method update in class Signal cannot be accessed
+    as a member of rxBankAccount.
+    Var[Int] from class BankAccount in object rxBankAccount Access to protected method update not permitted
+    because enclosing class BankAccount in object rxBankAccount is not a subclass of
+    class Signal in object rxBankAccount where target is defined balance() = b + amount
+     */
   }
 
   object Var {
