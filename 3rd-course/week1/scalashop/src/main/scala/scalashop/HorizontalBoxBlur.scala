@@ -41,8 +41,11 @@ object HorizontalBoxBlur extends HorizontalBoxBlurInterface {
    */
   def blur(src: Img, dst: Img, from: Int, end: Int, radius: Int): Unit = {
   // TODO implement this method using the `boxBlurKernel` method
-
-  ???
+    for(
+      x <- 0 until src.width;
+      y <- from until end
+      if y >= 0 && y < src.height
+    ) yield dst.update(x, y, boxBlurKernel(src, x, y, radius))
   }
 
   /** Blurs the rows of the source image in parallel using `numTasks` tasks.
@@ -51,10 +54,38 @@ object HorizontalBoxBlur extends HorizontalBoxBlurInterface {
    *  `numTasks` separate strips, where each strip is composed of some number of
    *  rows.
    */
+  def getTaskSize(numTasks:Int, total:Int) = {
+    // integer ceil
+    (numTasks + total -1)/numTasks
+    // ex) numTasks:3, total:10
+    // --> 3, 3, 3 (X) - one missing, can't recover
+    // --> 4, 4, 4 (O) - two more, but will be cut off
+  }
+  def chunkEndIndex(startIndex:Int, stepSize:Int, totalLength:Int):Int = {
+    val end = startIndex + stepSize
+    if(end > totalLength - 1) totalLength - 1
+    else end
+  }
   def parBlur(src: Img, dst: Img, numTasks: Int, radius: Int): Unit = {
   // TODO implement using the `task` construct and the `blur` method
+    /*
+    val sizePerTask:Int = getTaskSize(numTasks, src.height)
+    val startPoints = Range(0, src.height) by sizePerTask
+    val chunks:IndexedSeq[(Int,Int)] = startPoints.map(s => (s,chunkEndIndex(s, sizePerTask, src.height)))
+    val tasks = chunks.map{
+      case (start, end) => task { blur(src, dst, start, end, radius) }
+    }
+    tasks.map(t => t.join())
+     */
+    val rowsPerTaks:Int = Math.max(src.height / numTasks, 1)
+    val startPoints = Range(0, src.height) by rowsPerTaks
 
-  ???
+    val tasks = startPoints.map(t => {
+      task {
+        blur(src, dst, t, t + rowsPerTaks, radius)
+      }
+    })
+
+    tasks.map(t => t.join())
   }
-
 }

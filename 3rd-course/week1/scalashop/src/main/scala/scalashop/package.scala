@@ -54,13 +54,12 @@ package object scalashop extends BoxBlurKernelInterface {
     * You can find its signature in the package object of this assignment:
     * */
   def boxBlurKernel(src: Img, x: Int, y: Int, radius: Int): RGBA = {
-
     // TODO implement using while loops
-    val square = {
+    val pixels = {
       for (
         i <- -radius to radius;
         j <- -radius to radius
-      ) yield (scalashop.clamp(x + i, 0, src.width - 1), scalashop.clamp(y + j, 0, src.height - 1))
+      ) yield (clamp(x + i, 0, src.width - 1), clamp(y + j, 0, src.height - 1))
     }.distinct.map({
       case (x, y) =>
         val pixel = src(x, y)
@@ -68,10 +67,10 @@ package object scalashop extends BoxBlurKernelInterface {
     })
 
     rgba(
-      square.map(_._1).sum / square.length,
-      square.map(_._2).sum / square.length,
-      square.map(_._3).sum / square.length,
-      square.map(_._4).sum / square.length
+      pixels.map(_._1).sum / pixels.length,
+      pixels.map(_._2).sum / pixels.length,
+      pixels.map(_._3).sum / pixels.length,
+      pixels.map(_._4).sum / pixels.length
     )
   }
 
