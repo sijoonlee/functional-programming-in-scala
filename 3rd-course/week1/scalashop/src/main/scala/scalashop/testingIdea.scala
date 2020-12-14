@@ -9,12 +9,13 @@ object testingIdea {
     val tasks = chunks.map{
       case (start, end) => println(start, end)
     }
+    println("----------")
     val tasks2 = startPoints.map( t => print(t, t + sizePerTask))
   }
   def main(args: Array[String]): Unit = {
 
-    test(32, 32)
-    println("----------")
+    test(8, 4)
+
 
 
 
